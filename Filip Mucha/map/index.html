@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+       /* Set the size of the div element that contains the map */
+      #map {
+        height: 400px;  /* The height is 400 pixels */
+        width: 100%;  /* The width is the width of the web page */
+       }
+    </style>
+  </head>
+  <body>
+    <!--The div element for the map -->
+    <div id="map"></div>
+
+
+    <script>
+
+// Initialize and add the map
+function initMap() {
+
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+    console.log("szerokosc: "+ position.coords.latitude); 
+    console.log("dlugosc: "+ position.coords.longitude);   
+    var user = {lat: position.coords.latitude, lng: position.coords.longitude}; //koordynaty uzytkownika
+    
+
+    var map = new google.maps.Map(
+        document.getElementById('map'), {zoom: 4, center: user}); //ustawienie mapy na uzytkowniku
+
+    var marker;
+
+    document.addEventListener('keydown', (e) => { //poruszanie markerem
+            
+        switch (e.keyCode) {
+            case 38: //strzalka w gore 
+                position.coords.latitude += 0.01; 
+                break;
+            case 40: //strzalka w dol
+                position.coords.latitude -= 0.01;
+                break;
+            case 37: //strzalka w lewo
+                position.coords.longitude -= 0.01;
+                break;
+            case 39: //strzalka w prawo
+                position.coords.longitude += 0.01;
+                break;
+        }
+        marker.setPosition({ lat: position.coords.latitude, lng: position.coords.longitude });
+        
+    });
+    
+    marker = new google.maps.Marker({position: user, map: map});
+
+    });
+
+  } else {
+    alert("Geolokalizacja niewspierana");
+  }
+}
+
+    </script>
+    <!--Load the API from the specified URL
+    * The async attribute allows the browser to render the page while the API loads
+    * The key parameter will contain your own API key (which is not needed for this tutorial)
+    * The callback parameter executes the initMap() function
+    -->
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAfgtQMmzOuiPPDwLetAQsmPFV_pv14Nes&callback=initMap">
+    </script>
+  </body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id="main" width="640" height="480">
+
+    </canvas>
+
+    <form>
+        
+        <div>
+            <label for="contrastIp">Kontrast</label>
+            <input type="range" name="contrastIp" id="contrastIp" min="-100" max="100" value="0" oninput="contrast()" >
+            <!-- -->
+        </div>
+        <div>
+            <label for="brightnessIp">Jasność</label>
+            <input type="range" name="brightnessIp" id="brightnessIp" min="0" max="100" value="100" oninput="brightness()">
+        </div>
+        
+        
+    </form>
+
+    <script src="script.js"></script>
+</body>
+</html>

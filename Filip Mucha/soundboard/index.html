@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <div>
+        <p>Dźwięki:</p>
+        <ul>
+            <li>q</li>
+            <li>w</li>
+            <li>e</li>
+            <li>r</li>
+        </ul>
+    </div>
+    <button id="play">Play</button>
+    <form action="">
+        <input type="radio" name="gender" value="1"> 1<br>
+        <input type="radio" name="gender" value="2"> 2<br>
+        <input type="radio" name="gender" value="3"> 3 <br>
+        <input type="radio" name="gender" value="4"> 4 <br>
+    </form>
+
+    <div>
+        <h2>Instrukcja</h2>
+        <p>wciśnij klawisz od dźwięku by zagrać</p>
+        <p>wybierz kanał, graj swoje dźwięki, wciśnij klawisz A żeby zakończyć nagrywanie i wciśnij przycisk PLAY żeby odsłuchać nagranie</p>
+    </div>
+</head>
+<script>
+
+    let channels = [ //  kanały do nagrywania - 4 kanały = 4 tablice 
+        [],
+        [],
+        [],
+        []
+    ]
+
+    let playButton = document.querySelector('#play');
+    let lastInterval = 0;
+
+    playButton.onclick = (c) => { // event onclick na przycisku play
+        let selected = document.querySelector('input:checked'); //ścieżka która jest wybrana - checked 
+        let selectedChannel = channels[parseInt(selected.value) - 1]; //wybranie tablicy 
+ 
+        let firstElement = selectedChannel[0]; //pierwsze element tablicy
+        let lastElement = selectedChannel[selectedChannel.length - 1]; //ostatni element tablicy
+
+        let distance = lastElement.stamp - firstElement.stamp; // odległość od pierwszego do ostatniego elementu
+        let starttime = new Date().getTime();
+
+        selectedChannel.map(x => x.played = false); // nowa tablica z elementów 
+        clearInterval(lastInterval);
+
+        lastInterval = setInterval((selectedChannel, firstElement, lastElement, distance, starttime) => {
+            let timeDistance = new Date().getTime() - starttime;
+            let element = selectedChannel.find(x => !x.played &&
+             (x.stamp - firstElement.stamp) < timeDistance);
+            if (element) {
+                if (element.played != true && element.sound) {
+                    let audio = new Audio(element.sound + '.wav');
+                    audio.play();
+                }
+                element.played = true;
+                if ((distance + 150) < (new Date().getTime() - starttime)) {
+                    clearInterval(lastInterval);
+                }
+            }
+
+        }, 50, selectedChannel, firstElement, lastElement, distance, starttime)
+
+    };
+
+
+    let activeChannel = null;
+    let sounds = { // można rozbudować 
+        'q': './s/snare-808', //ścieżki do dźwięków
+        'w': './s/hihat-dist01',
+        'e': './s/cowbell-808',
+        'r': './s/perc-hollow'
+    };
+
+    window.onkeydown = (e) => {
+        if ( //nr kanałów
+            e.key == "1" ||
+            e.key == "2" ||
+            e.key == "3" ||
+            e.key == "4"
+        ) {
+            // nagrywanie na ścieżkę
+            console.log("Started");
+            let channel = Number.parseInt(e.key); //nr kanału
+            activeChannel = channel; 
+            let selectedChannel = channels[channel - 1] = [];
+            selectedChannel.push( // wrzucenie dźwięku do kanału 
+                {
+                    stamp: new Date().getTime(), //czas
+                    sound: null
+                });
+        }
+        else if (e.key == 'a') { // wyłączenie nagrywania
+            activeChannel = null;
+            
+            console.log('stop');
+        }
+        else { //odtwarzanie nagrania
+            console.log('played')
+            let selected = sounds[e.key];
+            let audio = new Audio(selected + '.wav');
+            audio.play();
+            if (activeChannel != null) {
+                channels[activeChannel - 1].push({
+                    stamp: new Date().getTime(),
+                    sound: selected
+                });
+            }
+
+        }
+    }
+</script>
+
+<body>
+</body>
+
+</html>

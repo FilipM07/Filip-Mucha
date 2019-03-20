@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #map {
+            width: 640px;
+            height: 480px;
+            border: 1px solid black;
+            position: absolute;
+        }
+
+        #ball {
+            width: 25px;
+            height: 25px;
+            background-color: blue;
+            border-radius: 12.5px;
+            z-index: 10;
+            position: absolute;
+        }
+
+        #hole {
+            width: 25px;
+            height: 25px;
+            background-color: black;
+            border-radius: 12.5px;
+            z-index: 20;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div id="map">
+        <div id="ball">
+        </div>
+        <div id="hole">
+        </div>
+    </div>
+
+    <script src="index.js"></script>
+</body>
+</html>
